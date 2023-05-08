@@ -322,62 +322,7 @@ T find_max_CSR(CSRMatrix<T> m1)
         },
         [](T x, T y) { return std::max(x, y); }
     );}
-//     tbb::parallel_for( tbb::blocked_range<int>(0, 100000000), [&](tbb::blocked_range<int> r){
-//         cerr << "hi" << std::endl;
-// 			for (int i = r.begin(); i != r.end(); ++i)
-//             {
-//                m1.val[i%m1.val.size()] = 5 *i;
-//             }
-// });
-//     return true;
-// }
-/// @brief gaussian elimination with forward elimination on a square matrix
-/// @exception The matrix must be square
-/// @param A A dense matrix to eliminate
-/// @return returns true if successful
-bool gaussian_elimination(std::vector<std::vector<double> > &A) {
-    if (A.size() != A[0].size())
-    {
-        throw std::invalid_argument("The matrix must be sqaue.");
-    }
-     // Iterate over each row in the matrix
-    double pivot;
-    timer stopwatch;
-    for(size_t i = 0; i < A.size() - 1; i++){
-        // Pivot will be the diagonal
-        pivot = A[i][i];
-        //stopwatch.elapsed();
-        // Iterate of the remaining row elements
-        tbb::parallel_for( tbb::blocked_range<size_t>(i+1, A[0].size()), [&](tbb::blocked_range<size_t> r){
-            for(size_t j = r.begin(); j < r.end(); j++){
-                A[i][j] /= pivot;
-            }
-        });
 
-        // Do direct assignment for trivial case (self-divide)
-        A[i][i] = 1.0;
-
-        // Eliminate ith element from the jth row
-            tbb::parallel_for( tbb::blocked_range<size_t>(i+1, A.size()), [&](tbb::blocked_range<size_t> r){
-                float scale;
-                for(size_t j = r.begin(); j < r.end(); j++){
-                    // Factor we will use to scale subtraction by
-                    scale = A[j][i];
-
-                    // Iterate over the remaining columns
-                    for(size_t k = i + 1; k < A.size(); k++){
-                        A[j][k] -= A[i][k] * scale;
-                    }
-
-                    // Do direct assignment for trivial case (eliminate position)
-                    A[j][i] = 0;
-                }
-            });
-    }
-    A[A.size()-1][A[0].size()-1] = 1;
-
-    return true;
-}
 
 // /**
 //  * @brief As a prerequisite for the Jacobi Method, the matrix must be diagonally dominant,

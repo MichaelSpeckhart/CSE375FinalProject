@@ -461,6 +461,8 @@ bool diagonally_dominant(std::vector<std::vector<double>> denseMatrix) {
     
     return true;
 }
+
+
 /**
  * @brief The Jacobi Method is an iterative method for determining the solutions of a strictly
  * diagonally dominant matrix A. Through each iteration, the values of x[i] are approximated through
@@ -488,10 +490,10 @@ std::vector<double> jacobi_method(std::vector<std::vector<double>> denseMatrix, 
             }
             approxValues[i] = (B[i] - sum) / denseMatrix[i][i];
         
-        xValues = approxValues;
-        iterations++;
-    }
+          xValues = approxValues;
+          iterations++;
+      }  
     
-}
-return approxValues;
+    }
+    return approxValues;
 }

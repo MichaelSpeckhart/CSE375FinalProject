@@ -10,20 +10,12 @@ using namespace std;
 template <typename T>
 class CSRMatrix
 {
-    // struct colValStruct {
-    //     int col;
-    //     T value;
-    // };
 public:
     size_t numRows, numColumns;
-    // vector<colValStruct*> rowPointersVector;
-    // fist value is col_ind and the second value is the value
-    // vector<colValStruct> columnValueVector;
     vector<T> val;
     vector<size_t> col_ind;
     vector<size_t> row_ptr;
 };
-// TODO loadfile
 // TODO savefile
 
 /// @brief Gets a value from the compressed sparse row(CSR) matrix

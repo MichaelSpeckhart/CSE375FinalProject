@@ -1,16 +1,3 @@
-// functions.cc
-// Contains all of the functions for performing operations on matrices.
-
-// Potential improvement, implement the functions using iterators instead of
-// counter based loops.
-// See: algorithm.h by GCC
-
-// AS 12 February 2023
-// 	- I removed the Open MP configurationse since they were mostly
-// 	  redundant (e.g. local vars are by default private).
-//	- Looking back it probably would have been better to have used Intel's 
-//        One API's TBB (it is what it is).
-//
 #include <fstream>
 #include <iostream>
 #include <random>
@@ -70,7 +57,7 @@ vector<vector<vector<double> > > read_file(char *filename) {
     num = (int)stof(data[0]);
     data.erase(data.begin(), data.begin() + 1);
 
-//#pragma omp parallel
+
     for (int i = 0; i < num; ++i) {
       d1 = (int)stof(data[0]);
       d2 = (int)stof(data[1]);
@@ -111,7 +98,7 @@ vector<vector<double> > sum_matrix(vector<vector<double> > m1,
   if (d1 != static_cast<size_t>(m2.size()) || d2 != static_cast<size_t>(m2[0].size()))
     return d_err;
 
-//#pragma omp parallel
+
   for (size_t i = 0; i < d1; ++i)
     for (size_t j = 0; j < d2; ++j)
       m1[i][j] -= m2[i][j];
@@ -131,7 +118,7 @@ vector<vector<double> > sub_matrix(vector<vector<double> > m1,
   if (d1 != static_cast<int>(m2.size()) || d2 != static_cast<int>(m2[0].size()))
     return d_err;
 
-//#pragma omp parallel
+
   for (int i = 0; i < d1; ++i)
     for (int j = 0; j < d2; ++j)
       m1[i][j] -= m2[i][j];
@@ -160,7 +147,7 @@ vector<vector<double> > generate_random_matrix(const int d1, const int d2,
   default_random_engine eng(rd());
   uniform_real_distribution<double> distr(min, max);
 
-//#pragma omp parallel
+
   for (int i = 0; i < d1; ++i) {
     for (int j = 0; j < d2; ++j)
       line.push_back(distr(eng));
@@ -224,11 +211,11 @@ vector<vector<double> > mult_matrix(const vector<vector<double> > m1,
 
   // Try using the std::par_unseq execution policy from C++20 (it's actually
   // pretty cool how it implements SIMD)
-//#pragma omp parallel
+
   for (auto i = 0; i < r1; i++)
     m3[i] = vector<double>(c2, 0);
 
-//#pragma omp parallel
+
   for (int i = 0; i < r1; ++i)
     for (int j = 0; j < c2; ++j)
       for (int k = 0; k < r2; ++k)
@@ -245,7 +232,7 @@ vector<vector<double> > mult_matrix(const vector<vector<double> > m1,
 vector<vector<double> > scale_up(vector<vector<double> > m1, const double s) {
   const int d1 = static_cast<int>(m1.size()),
             d2 = static_cast<int>(m1[0].size());
-//#pragma omp parallel
+
   for (auto i = 0; i < d1; ++i)
     for (auto j = 0; j < d2; ++j)
       m1[i][j] *= s;
@@ -266,7 +253,7 @@ vector<vector<double> > scale_down(vector<vector<double> > m1, const double s) {
 
   const int d1 = static_cast<int>(m1.size()),
             d2 = static_cast<int>(m1[0].size());
-//#pragma omp parallel
+
   for (auto i = 0; i < d1; ++i)
     for (auto j = 0; j < d2; ++j)
       m1[i][j] /= s;
@@ -282,11 +269,11 @@ vector<vector<double> > transpose(const vector<vector<double> > m1) {
 
   vector<vector<double> > m2(d2);
 
-//#pragma omp parallel
+
   for (auto i = 0; i < d2; ++i)
     m2[i] = vector<double>(d1);
 
-//#pragma omp parallel
+
   for (auto i = 0; i < d1; ++i)
     for (auto j = 0; j < d2; ++j)
       m2[j][i] = m1[i][j];
@@ -311,7 +298,7 @@ bool save_file(const vector<vector<vector<double> > > matrices,
   f << '\n';
 
   size_t d1, d2;
-//#pragma omp parallel
+
   for (auto matrix : matrices) {
     d1 = matrix.size();
     d2 = matrix[0].size();

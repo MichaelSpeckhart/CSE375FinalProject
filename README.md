@@ -1,2 +1,2 @@
 # CSE375FinalProject
-Parallelizing Sparse Matrix Functions
+## Parallelizing Sparse Matrix Functions

@@ -484,3 +484,31 @@ std::vector<double> jacobi_method(std::vector<std::vector<double>> denseMatrix, 
     }
     return approxValues;
 }
+
+
+/**
+ * @brief Perform LU Factorization on a dense matrix A
+ * 
+ * @param A 
+ * @return std::pair<std::vector<std::vector<double>>, std::vector<std::vector<double>>> 
+ */
+std::pair<std::vector<std::vector<double>>, std::vector<std::vector<double>>> lu_factorization(const std::vector<std::vector<double>>& A) {
+    int n = A.size();
+    std::vector<std::vector<double>> L(n, std::vector<double>(n, 0.0)); 
+    std::vector<std::vector<double>> U = A; 
+
+    for (int k = 0; k < n; k++) {
+      L[k][k] = 1.0; 
+
+
+      for (int i = k+1; i < n; i++) {
+        double factor = U[i][k] / U[k][k]; 
+        L[i][k] = factor; 
+        for (int j = k; j < n; j++) {
+          U[i][j] -= factor * U[k][j]; 
+        }
+      }
+    }
+
+    return std::make_pair(L, U);
+}
